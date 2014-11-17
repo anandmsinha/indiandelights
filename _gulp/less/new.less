@@ -1,0 +1,207 @@
+// Core variables and mixins
+@import "../bower_components/bootstrap/less/variables.less";
+@import "../bower_components/bootstrap/less/mixins.less";
+
+// variable reset
+@navbar-border-radius: 0;
+@navbar-height:                    28px;
+@font-family-sans-serif: 'Source Sans Pro', sans-serif;
+@input-border-radius: 0;
+@border-radius-base: 0;
+@line-height-base: 1.4;
+@padding-base-vertical: 5px;
+
+// Reset and dependencies
+@import "../bower_components/bootstrap/less/normalize.less";
+@import "../bower_components/bootstrap/less/print.less";
+//@import "../bower_components/bootstrap/less/glyphicons.less";
+
+// Core CSS
+@import "../bower_components/bootstrap/less/scaffolding.less";
+@import "../bower_components/bootstrap/less/type.less";
+@import "../bower_components/bootstrap/less/code.less";
+@import "../bower_components/bootstrap/less/grid.less";
+@import "../bower_components/bootstrap/less/tables.less";
+@import "../bower_components/bootstrap/less/forms.less";
+@import "../bower_components/bootstrap/less/buttons.less";
+
+// Components
+@import "../bower_components/bootstrap/less/component-animations.less";
+@import "../bower_components/bootstrap/less/dropdowns.less";
+//@import "../bower_components/bootstrap/less/button-groups.less";
+@import "../bower_components/bootstrap/less/input-groups.less";
+@import "../bower_components/bootstrap/less/navs.less";
+@import "../bower_components/bootstrap/less/navbar.less";
+@import "../bower_components/bootstrap/less/breadcrumbs.less";
+//@import "../bower_components/bootstrap/less/pagination.less";
+//@import "../bower_components/bootstrap/less/pager.less";
+@import "../bower_components/bootstrap/less/labels.less";
+//@import "../bower_components/bootstrap/less/badges.less";
+//@import "../bower_components/bootstrap/less/jumbotron.less";
+@import "../bower_components/bootstrap/less/thumbnails.less";
+@import "../bower_components/bootstrap/less/alerts.less";
+//@import "../bower_components/bootstrap/less/progress-bars.less";
+@import "../bower_components/bootstrap/less/media.less";
+//@import "../bower_components/bootstrap/less/list-group.less";
+@import "../bower_components/bootstrap/less/panels.less";
+//@import "../bower_components/bootstrap/less/responsive-embed.less";
+//@import "../bower_components/bootstrap/less/wells.less";
+@import "../bower_components/bootstrap/less/close.less";
+
+// Components w/ JavaScript
+//@import "../bower_components/bootstrap/less/modals.less";
+//@import "../bower_components/bootstrap/less/tooltip.less";
+//@import "../bower_components/bootstrap/less/popovers.less";
+@import "../bower_components/bootstrap/less/carousel.less";
+
+// Utility classes
+@import "../bower_components/bootstrap/less/utilities.less";
+@import "../bower_components/bootstrap/less/responsive-utilities.less";
+@import "roboto.less";
+@import "fontkit.less";
+//@import "components/notification.less";
+
+.font__bold {
+    font-weight: bold;
+}
+
+.font__mid {
+    font-weight: 600;
+}
+
+.color__light__blue {
+    color: #477b96;
+}
+
+.mid__margin {
+    margin-top: 20px;
+}
+
+.text__beautify {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.btn {
+    font-weight: 600;
+}
+
+.btn__stylish--default {
+    background-image: linear-gradient(to bottom,#f5f5f5 0,#f1f1f1 100%);
+    height: 31px;
+}
+
+.btn-sm, .btn-xs {
+    border-radius: 0;
+}
+
+.nav__tabs--outer {
+    & > li {
+        margin: 0 -1px 0 0;
+        > a {
+            padding: 6px 4px;
+            margin: 0 8px;
+            line-height: 1.4;
+            color: lighten(#222, 10%);
+            border: 3px solid transparent;
+            border-width: 3px 0;
+            border-radius: 0;
+            &:hover, &:focus {
+                color: #000;
+                background-color: #fff;
+                border-color: transparent;
+            }
+        }
+        &.active {
+            > a {
+                &:first-of-type {
+                    margin-left: 0;
+                }
+                &, &:hover, &:focus {
+                    color: #dd4b39;
+                    border: 3px solid transparent;
+                    border-width: 3px 0;
+                    border-bottom-color: #dd4b39;
+                }
+            }
+        }
+    }
+}
+
+.icon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+}
+
+@import "components/home.less";
+
+.no__margin {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.light__heading {
+    font-weight: 600;
+}
+
+.large__text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #222;
+}
+
+#main__bottom__footer {
+    margin-top: 15px;
+    border-top: 2px solid rgba(0,0,0,0.05);
+    padding-top: 10px;
+}
+
+#cart__dropdown_parent {
+    padding: 15px;
+    width: 265px;
+    border-radius: 0;
+    border-width: 2px;
+    border-top-width: 1px;
+    border-bottom-width: 4px;
+    box-shadow: 0 0 9px 5px rgba(0,0,0,0.05);
+    a {
+        font-weight: 600;
+    }
+}
+
+.small_hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.category__heading {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.no__style__link {
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+.special__select__box {
+    display: inline-block;
+    width: 50%;
+    height: 30px;
+    position: relative;
+    top: 3px;
+    margin-bottom: 2px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    cursor: pointer;
+}
+
+.navbar__top__in {
+    border-bottom: 1px solid #eee;
+}

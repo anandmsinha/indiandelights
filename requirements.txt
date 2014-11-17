@@ -1,0 +1,5 @@
+Django==1.7
+django-jinja
+django-imagekit==3.2.4
+pilkit==1.1.12
+Pillow==2.6.0

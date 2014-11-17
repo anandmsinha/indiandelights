@@ -1,0 +1,23 @@
+{
+  "name": "ThunderBox",
+  "version": "0.0.1",
+  "description": "An interanl project for crowd storming",
+  "main": "index.js",
+  "readme": "some random thing",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-autoprefixer": "*",
+    "gulp-coffee": "^2.2.0",
+    "gulp-csso": "^0.2.9",
+    "gulp-less": "*",
+    "gulp-minify-css": "^0.3.8",
+    "gulp-sourcemaps": "*",
+    "gulp-util": "*",
+    "gulp-watch": "^0.7.0"
+  },
+  "author": "Anand mohan sinha",
+  "license": "ISC"
+}
