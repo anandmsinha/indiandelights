@@ -1,5 +1,5 @@
 (($, window, document) ->
-    requestUrls = 
+    requestUrls =
         baseUrl: '/'
         addToCart: '/item/cart/'
 
@@ -42,34 +42,38 @@
 
     csrftoken = getCookie('csrftoken')
 
-    $.ajaxSetup 
+    $.ajaxSetup
         beforeSend: (xhr, settings) ->
             if !csrfSafeMethod(settings.type) and !settings.crossDomain
                 xhr.setRequestHeader("X-CSRFToken", csrftoken)
 
-    equalHeight = (group) ->
-        tallest = 0
-        changeHeight = false
-        if group.length > 0
-            tallest = $(group[0]).height()
-        group.each ->
-            tmpHeight = $(this).height()
-            if tmpHeight > tallest
-                tallest = tmpHeight
-                changeHeight = true
-        if changeHeight
+    equalHeight = (group, state) ->
+        if !state
             group.each ->
-                $(this).height(tallest)
+                $(this).height(360)
+        else
+            tallest = 0
+            changeHeight = false
+            if group.length > 0
+                tallest = $(group[0]).height()
+            group.each ->
+                tmpHeight = $(this).height()
+                if tmpHeight > tallest
+                    tallest = tmpHeight
+                    changeHeight = true
+            if changeHeight
+                group.each ->
+                    $(this).height(tallest)
 
     $ ->
-        equalHeight $('.product__300__thumbnail')
+        equalHeight $('.product__300__thumbnail'), false
 
     $(window).resize (e) ->
-        equalHeight $('.product__300__thumbnail')
+        equalHeight $('.product__300__thumbnail'), true
 
     updateCart = (cart) ->
         htmlop = ''
-        bformat = '<div class="media"><a href="#" class="pull-left"><img width="40" height="36" src="{0}" alt=""></a>' + 
+        bformat = '<div class="media"><a href="#" class="pull-left"><img width="40" height="36" src="{0}" alt=""></a>' +
             '<div class="media-body"><a href="#">{1}</a><p>Qty - {2} X {3}</p></div></div>'
         cartSize = objectSize(cart)
         $.each cart, (k, v) ->
@@ -82,10 +86,10 @@
         $('#cart__default__count').text cartSize
 
     addToCart = (id, qty, msg) ->
-        $.ajax 
+        $.ajax
             type: 'POST'
             url: requestUrls.addToCart
-            data: 
+            data:
                 type: 'add'
                 pid: id
                 quantity: qty

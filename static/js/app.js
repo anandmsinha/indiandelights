@@ -65,32 +65,38 @@
       }
     }
   });
-  equalHeight = function(group) {
+  equalHeight = function(group, state) {
     var changeHeight, tallest;
-    tallest = 0;
-    changeHeight = false;
-    if (group.length > 0) {
-      tallest = $(group[0]).height();
-    }
-    group.each(function() {
-      var tmpHeight;
-      tmpHeight = $(this).height();
-      if (tmpHeight > tallest) {
-        tallest = tmpHeight;
-        return changeHeight = true;
-      }
-    });
-    if (changeHeight) {
+    if (!state) {
       return group.each(function() {
-        return $(this).height(tallest);
+        return $(this).height(360);
       });
+    } else {
+      tallest = 0;
+      changeHeight = false;
+      if (group.length > 0) {
+        tallest = $(group[0]).height();
+      }
+      group.each(function() {
+        var tmpHeight;
+        tmpHeight = $(this).height();
+        if (tmpHeight > tallest) {
+          tallest = tmpHeight;
+          return changeHeight = true;
+        }
+      });
+      if (changeHeight) {
+        return group.each(function() {
+          return $(this).height(tallest);
+        });
+      }
     }
   };
   $(function() {
-    return equalHeight($('.product__300__thumbnail'));
+    return equalHeight($('.product__300__thumbnail'), false);
   });
   $(window).resize(function(e) {
-    return equalHeight($('.product__300__thumbnail'));
+    return equalHeight($('.product__300__thumbnail'), true);
   });
   updateCart = function(cart) {
     var bformat, cartSize, htmlop;
