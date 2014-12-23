@@ -1,0 +1,61 @@
+{% extends "_layouts/base.html" %}
+{% load staticfiles %}
+{% load product_tags %}
+
+{% block content %}
+<div id="main__page__content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 product__breadcrumbs">
+                <ol class="breadcrumb breadcrumb-sm">
+                  <li><a href="{% url 'home_page' %}">Home</a></li>
+                  <li class="active">{{ item.name }}</li>
+                </ol>
+            </div>
+        </div>
+        <div id="product__main__details" class="row">
+            <div id="product__main__image" class="col-md-5">
+                <img src="{{ item.image_lg_thumbnail.url }}" alt="{{ item.name }}" class="img-thumbnail">
+            </div>
+            <div id="product__main__headingtext" class="col-md-7">
+                <div class="product__page__header">
+                  <h3 class="no__margin light__heading">{{ item.name }}</h3>
+                </div>
+                <div class="product__side__details">
+                    <dl class="dl-horizontal dl__custom__margin">
+                      <dt>Vendor</dt>
+                      <dd><a href="#">{{ item.vendor.name }} - {{ item.vendor.city.name }}</a></dd>
+                      <dt>Availablity</dt>
+                      <dd>{% autoescape off %}{{ item.get_availability_message }}{% endautoescape %}</dd>
+                      <dt>Price</dt>
+                      <dd>{{ item.price }} Rs - {{ item.unit.display_name }}</dd>
+                      <dt>Rating</dt>
+                      <dd class="color__yellow"><span class="icon icon-star-two"></span><span class="icon icon-star-two"></span><span class="icon icon-star-two"></span><span class="icon icon-star-two"></span><span class="icon icon-star"></span></dd>
+                      <dt>Delivered in</dt>
+                      <dd>{{ item.vendor.get_delivery_cities }}</dd>
+                      <dt>Taste type</dt>
+                      <dd>{{ item.taste.type }}</dd>
+                      <dt>Made with</dt>
+                      <dd>{{ item.made_with }}</dd>
+                      <dt>Delivery Time</dt>
+                      <dd>2-3 Days</dd>
+                      <dt class="dt__with__btn">Order</dt>
+                      <dd class="dd__with__btn">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control">
+                                  {% get_dropdown_qty item %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-primary"><span class="icon icon-caddie-shopping-streamline"></span> Buy Now</button>
+                            </div>
+                        </div>
+                      </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

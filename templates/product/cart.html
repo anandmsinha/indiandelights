@@ -1,0 +1,43 @@
+{% extends '_layouts/base.html' %}
+{% load cart_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            {% get_cart as main_cart %}
+            {% if main_cart.count == 0 %}
+                <p class="text-danger">Your cart is empty.</p>
+            {% else %}
+                <table class="table">
+                    <caption>Your shopping cart</caption>
+                    <thead>
+                        <th>Item</th>
+                        <th></th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th></th>
+                        <th>Total</th>
+                    </thead>
+                    <tbody>
+                        {% for k, v in main_cart.cart_dict.items %}
+                            <tr>
+                                <td><img src="{{ v.thumbnail }}"></td>
+                                <td>{{ v.name }}</td>
+                                <td>{{ v.price }}</td>
+                                <td><input type="number" min="1" value="{{ v.qty }}" /></td>
+                                <td><button type="button" class="btn btn-danger btn-xs">Remove</button></td>
+                                <td>{{ v.subtotal }} Rs</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="5"><p class="pull-right">Total</p></td>
+                            <td>458 Rs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

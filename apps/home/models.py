@@ -7,6 +7,7 @@ from os.path import join
 from uuid import uuid4
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+import json
 
 
 class AppUserManager(BaseUserManager):
@@ -197,15 +198,38 @@ class Item(models.Model):
 class HomePage(models.Model):
 
     """
-    Model for representing home page components that is which categories
-    will be shown on home page and which item will come in the left list.
+    Model for representing item which will be shown on home page.
     """
 
     category = models.ForeignKey(Categories, blank=True, null=True)
     metadata = models.TextField(default='{}', blank=True)
     order = models.PositiveIntegerField(null=True, blank=True)
 
+    metacache = None
+    is_decoded = False
+    main_items = []
+
     def __unicode__(self):
         if self.category:
             return unicode(self.category)
         return 'HomeCat'
+
+    def decode_json(self):
+        if not self.is_decoded:
+            self.is_decoded = True
+            try:
+                self.metacache = json.loads(self.metadata)
+            except Exception, e:
+                self.metacache = {}
+
+    def get_page_limit(self):
+        if 'grids' in self.metacache:
+            tmp_val = int(self.metacache['grids'])
+            if tmp_val > 0:
+                return tmp_val
+        return 6
+
+    def fetch_items(self):
+        category_ids = [cat.pk for cat in self.category.categories.all()]
+        category_ids.append(self.category.pk)
+        self.main_items = Item.objects.filter(categories__pk__in = category_ids).select_related('unit')[:self.get_page_limit()]

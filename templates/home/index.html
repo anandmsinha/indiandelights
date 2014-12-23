@@ -1,0 +1,65 @@
+{% extends '_layouts/base.html' %}
+{% load static %}
+{% load product_tags %}
+
+{% block content %}
+<div id="main__page__content" class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <ul class="nav nav__side__menu">
+              <li class="heading__item">Categories</li>
+              <li><a href="#">Salty</a></li>
+              <li><a href="#">Sweets</a></li>
+              <li><a href="#">Spicy</a></li>
+              <li><a href="#">Sendha</a></li>
+              <li class="heading__item">Specials</li>
+              <li><a href="#">Salty</a></li>
+              <li><a href="#">Sweets</a></li>
+              <li><a href="#">Spicy</a></li>
+              <li><a href="#">Sendha</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9">
+          <div id="carousel-example-captions" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carousel-example-captions" data-slide-to="0" class=""></li>
+              <li data-target="#carousel-example-captions" data-slide-to="1" class="active"></li>
+              <li data-target="#carousel-example-captions" data-slide-to="2" class=""></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="item"><img alt="900x500" src="{% static 'img/chef-cutting-1140x340.jpg' %}"></div>
+              <div class="item active"><img alt="900x500" src="{% static 'img/src_5224b831ee2c92.61171640.jpg' %}"></div>
+              <div class="item"><img src="{% static 'img/src_pbbq70g64l25069.13915850.jpg' %}"></div>
+            </div>
+            <a class="left carousel-control" href="#carousel-example-captions" role="button" data-slide="prev"><span class="icon-prev"></span></a>
+            <a class="right carousel-control" href="#carousel-example-captions" role="button" data-slide="next"><span class="icon-next"></span></a>
+          </div>
+          <!-- Main components of home page -->
+          <div id="main_page_home_components">
+            {% for home_component in home_components %}
+              {% if home_component.main_items|length > 0 %}
+                <h3 class="category__heading">{{ home_component.category.name }}</h3>
+                <div class="row">
+                  {% for item in home_component.main_items %}
+                    <div class="col-xs-12 col__xs__6  col-sm-6 col-md-4">
+                      <div class="thumbnail product__300__thumbnail">
+                        <img src="{{ item.image_thumbnail.url }}" alt="{{ item.name }}">
+                        <div class="caption">
+                          <h5 class="text__bold"><a href="{% url 'item_pk' item.pk %}">{{ item.name }}</a></h5>
+                          <p>{{ item.unit.display_name }} - {{ item.price }} Rs</p>
+                          <p>
+                            <select class="form-control special__select__box">{% get_dropdown_qty item %}</select>
+                            <a href="#" pid="{{ item.id }}" pqty="1.0" class="btn btn-primary btn-sm add__to__cart__btn" role="button"><span class="icon icon-caddie-shopping-streamline"></span> Add to cart</a>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

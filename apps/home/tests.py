@@ -31,6 +31,10 @@ class ViewsTestCase(TestCase):
         response = self.client.get(reverse('home_page'))
         self.assertEqual(response.status_code, 200)
 
+    def test_terms_page_is_working(self):
+        response = self.client.get(reverse('site_terms'))
+        self.assertEqual(response.status_code, 200)
+
 
 class ModelsTestCase(TestCase):
 
