@@ -50,7 +50,7 @@
     equalHeight = (group, state) ->
         if !state
             group.each ->
-                $(this).height(360)
+                $(this).height(345)
         else
             tallest = 0
             changeHeight = false

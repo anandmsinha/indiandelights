@@ -69,7 +69,7 @@
     var changeHeight, tallest;
     if (!state) {
       return group.each(function() {
-        return $(this).height(360);
+        return $(this).height(345);
       });
     } else {
       tallest = 0;
