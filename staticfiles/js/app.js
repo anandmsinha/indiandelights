@@ -133,15 +133,62 @@
       }
     });
   };
-  return $(document).on('click', '.add__to__cart__btn', function(e) {
+  $(document).on('click', '.add__to__cart__btn', function(e) {
     var link, qty;
     link = $(this);
     if (!link.hasClass('disabled')) {
       qty = link.parent().find('.special__select__box').val();
       link.addClass('disabled');
+      link.attr('disabled', 'disabled');
       addToCart(link.attr('pid'), qty, 'Your item has been succesfully added to cart.');
       link.removeClass('disabled');
+      link.removeAttr('disabled');
     }
     return false;
+  });
+  $(document).on('click', '#product__pchase__btn', function(e) {
+    var btnDisbAttr, loopStatus, mainBtn;
+    mainBtn = $(this);
+    btnDisbAttr = mainBtn.attr('disabled');
+    loopStatus = !((typeof btnDisbAttr !== typeof void 0) && (btnDisbAttr !== false));
+    if (loopStatus) {
+      mainBtn.attr('disabled', 'disabled');
+      addToCart(mainBtn.attr('pid'), $('#product__pchase__select').val(), 'Your item has been added to cart');
+      return mainBtn.removeAttr('disabled');
+    }
+  });
+  return $(document).on('click', '.cart__ck__remove', function(e) {
+    var removeBtn;
+    removeBtn = $(this);
+    if (!removeBtn.hasClass('disabled')) {
+      removeBtn.addClass('disabled');
+      $.ajax({
+        type: 'POST',
+        url: requestUrls.addToCart,
+        data: {
+          type: 'remove',
+          pid: removeBtn.attr('pid')
+        },
+        success: function(data) {
+          var cartData, cartSize, total;
+          if (data.cart) {
+            cartData = data.cart;
+            updateCart(cartData);
+            cartSize = objectSize(cartData);
+            if (cartSize > 0) {
+              total = parseFloat($('#cart__ck__total__cost').text()) - parseFloat(removeBtn.attr('mtotal'));
+              $('#cart__ck__total__cost').text(total);
+              return removeBtn.parent().parent().remove();
+            } else {
+              return $('#cart__ck__main__table').html("<p class=\"text-danger\">Your cart is empty.</p>");
+            }
+          }
+        },
+        error: function(data) {
+          return alert('Some error has occured refresh the page and try again.');
+        }
+      });
+      return removeBtn.removeClass('disabled');
+    }
   });
 })(jQuery, window, document);

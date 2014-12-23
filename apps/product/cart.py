@@ -34,7 +34,6 @@ class CartItem(object):
     @property
     def subtotal(self):
         total = float(self.price) * float(self.qty)
-        logger.debug("cart item total - " + total)
         return total
 
 
@@ -112,3 +111,10 @@ class Cart(object):
     @property
     def count(self):
         return len(self._items_dict)
+
+    @property
+    def total(self):
+        total = 0
+        for k, v in self._items_dict.iteritems():
+            total += v.subtotal
+        return total

@@ -104,7 +104,46 @@
         if !link.hasClass 'disabled'
             qty = link.parent().find('.special__select__box').val()
             link.addClass 'disabled'
+            link.attr 'disabled', 'disabled'
             addToCart(link.attr('pid'), qty, 'Your item has been succesfully added to cart.')
             link.removeClass 'disabled'
+            link.removeAttr 'disabled'
         return false
+
+    $(document).on 'click', '#product__pchase__btn', (e) ->
+        mainBtn = $(this)
+        btnDisbAttr = mainBtn.attr 'disabled'
+        loopStatus = !((typeof btnDisbAttr != typeof undefined) && (btnDisbAttr != false))
+        if loopStatus
+            mainBtn.attr('disabled', 'disabled')
+            addToCart mainBtn.attr('pid'), $('#product__pchase__select').val(), 'Your item has been added to cart'
+            mainBtn.removeAttr 'disabled'
+
+    $(document).on 'click', '.cart__ck__remove', (e) ->
+        removeBtn = $(this)
+        if !removeBtn.hasClass 'disabled'
+            removeBtn.addClass 'disabled'
+            $.ajax
+                type: 'POST'
+                url: requestUrls.addToCart
+                data:
+                    type: 'remove'
+                    pid: removeBtn.attr('pid')
+                success: (data) ->
+                    if data.cart
+                        cartData = data.cart
+                        updateCart(cartData)
+                        cartSize = objectSize(cartData)
+                        if cartSize > 0
+                            # Just remove this row and update total
+                            total = parseFloat($('#cart__ck__total__cost').text()) - parseFloat(removeBtn.attr('mtotal'))
+                            $('#cart__ck__total__cost').text(total)
+                            removeBtn.parent().parent().remove()
+                        else
+                            $('#cart__ck__main__table').html("<p class=\"text-danger\">Your cart is empty.</p>")
+
+                error: (data) ->
+                    alert('Some error has occured refresh the page and try again.')
+            removeBtn.removeClass 'disabled'
+
 ) jQuery, window, document

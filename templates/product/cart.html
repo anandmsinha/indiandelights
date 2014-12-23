@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-xs-12">
+        <div id="cart__ck__main__table" class="col-xs-12">
             {% get_cart as main_cart %}
             {% if main_cart.count == 0 %}
                 <p class="text-danger">Your cart is empty.</p>
@@ -19,20 +19,21 @@
                         <th></th>
                         <th>Total</th>
                     </thead>
-                    <tbody>
+                    <tbody id="cart__ck__table__body">
                         {% for k, v in main_cart.cart_dict.items %}
                             <tr>
                                 <td><img src="{{ v.thumbnail }}"></td>
                                 <td>{{ v.name }}</td>
                                 <td>{{ v.price }}</td>
-                                <td><input type="number" min="1" value="{{ v.qty }}" /></td>
-                                <td><button type="button" class="btn btn-danger btn-xs">Remove</button></td>
-                                <td>{{ v.subtotal }} Rs</td>
+                                <td><input type="number" class="cart__ck__input__qty" min="1" oval="{{ v.qty }}" value="{{ v.qty }}" /></td>
+                                <td><button pid="{{ v.pk }}" mtotal="{{ v.subtotal }}" type="button" class="btn btn-danger cart__ck__remove btn-xs">Remove</button></td>
+                                <td><b>{{ v.subtotal }} Rs</b></td>
                             </tr>
                         {% endfor %}
                         <tr>
-                            <td colspan="5"><p class="pull-right">Total</p></td>
-                            <td>458 Rs</td>
+                            <td colspan="4"><button id="cart__ck__upd__cart" type="button" class="btn btn-info pull-right">Update Cart</button></td>
+                            <td><p class="pull-right">Total</p></td>
+                            <td><b><span id="cart__ck__total__cost">{{ main_cart.total }}</span> Rs</b></td>
                         </tr>
                     </tbody>
                 </table>
