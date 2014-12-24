@@ -78,6 +78,8 @@ TEMPLATE_DIRS = (
 
 AUTH_USER_MODEL = 'home.AppUser'
 
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 # Jinja template
 #DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
 # LOGGING = {
