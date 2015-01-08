@@ -1,2 +1,4 @@
+__pycache__/
+*.py[cod]
 /_gulp/bower_components
 /_gulp/node_modules
