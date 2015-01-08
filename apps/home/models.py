@@ -153,8 +153,7 @@ def image_upload_rename(self, filename):
         filename = '{}.{}'.format(self.pk, ext)
     else:
         today_date = date.today()
-        filename = join(str(today_date.year), str(today_date.month),
-                        str(today_date.day), '{}.{}'.format(uuid4().hex, ext))
+        filename = '{}{}{}{}.{}'.format(str(today_date.year), str(today_date.month), str(today_date.day), uuid4().hex,ext)
     return join(path, filename)
 
 
