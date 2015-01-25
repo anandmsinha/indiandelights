@@ -34,7 +34,7 @@
 @import "../bower_components/bootstrap/less/navbar.less";
 @import "../bower_components/bootstrap/less/breadcrumbs.less";
 //@import "../bower_components/bootstrap/less/pagination.less";
-//@import "../bower_components/bootstrap/less/pager.less";
+@import "../bower_components/bootstrap/less/pager.less";
 @import "../bower_components/bootstrap/less/labels.less";
 //@import "../bower_components/bootstrap/less/badges.less";
 //@import "../bower_components/bootstrap/less/jumbotron.less";
@@ -140,6 +140,7 @@
 }
 
 @import "components/home.less";
+@import "components/toaster.less";
 
 .no__margin {
     margin-top: 0;
@@ -154,12 +155,6 @@
     font-size: 16px;
     line-height: 1.5;
     color: #222;
-}
-
-#main__bottom__footer {
-    margin-top: 15px;
-    border-top: 2px solid rgba(0,0,0,0.05);
-    padding-top: 10px;
 }
 
 #cart__dropdown_parent {
@@ -213,7 +208,6 @@
 .main__static__block {
     margin-top: 20px;
     padding: 10px;
-    border: 1px solid #E2EDF2;
 }
 
 .delights__side__menu {
@@ -226,4 +220,64 @@
 
 .delights__static__content {
     font-size: 16px;
+    h1:first-child {
+        margin-top: 0;
+    }
+}
+
+
+// Home page
+.navbar-toggle {
+    .icon-bar {
+        background-color: #800080;
+    }
+}
+
+
+// All vendors page.
+.top__subnav__m {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.vendor__thumbnail {
+    img {
+        border: 1px solid #ddd;
+        padding: 4px;
+    }
+}
+.media-content {
+    color: #777;
+    font-size: 14px;
+}
+
+
+// Main footer
+#main__bottom__footer {
+    margin-top: 15px;
+    padding-top: 10px;
+    background: none repeat scroll 0 0 #f7f7f7;
+    border-top: 1px solid #ddd;
+}
+
+//Partner page
+.partner__desc {
+    font-size: 25px;
+    line-height: 32px;
+    color: #9494a1;
+}
+.faq__title {
+    color: #534540;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.faq__ques {
+    font-size: 20px;
+    line-height: 28px;
+    margin-bottom: 8px;
+}
+.faq__ans{
+    font-size: 18px;
+    line-height: 26px;
+    margin-bottom: 10px;
+    color: #988f8c;
 }

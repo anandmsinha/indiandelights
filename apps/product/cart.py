@@ -83,16 +83,20 @@ class Cart(object):
         self.update_session()
 
     def process_qty(self, qty):
-        qty = float(qty)
-        if qty <= 0.0:
+        qty = int(qty)
+        if qty < 0:
             raise ValueError('Quantity should be a positive number')
         return qty
 
     def set_quantity(self, item, qty):
         qty = self.process_qty(qty)
+        if qty == 0:
+            self.remove(item)
+            return True
         item_pk = str(item.pk)
         if item_pk in self._items_dict:
             self._items_dict[item_pk].qty = qty
+            self._items_dict[item_pk].total = float(self._items_dict[item_pk].price) * float(qty)
             self.update_session()
             return True
         return False

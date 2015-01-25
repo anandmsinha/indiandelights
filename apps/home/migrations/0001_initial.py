@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import django.utils.timezone
+from django.conf import settings
+import apps.home.models
 
 
 class Migration(migrations.Migration):
@@ -31,5 +33,106 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'users',
             },
             bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Categories',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
+                ('metadata', models.TextField(default=b'{}', blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Cities',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=150)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='HomePage',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('metadata', models.TextField(default=b'{}', blank=True)),
+                ('order', models.PositiveIntegerField(null=True, blank=True)),
+                ('category', models.ForeignKey(to='home.Categories')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Item',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=200)),
+                ('available', models.BooleanField(default=True)),
+                ('made_with', models.TextField(null=True, blank=True)),
+                ('price', models.FloatField(default=100.0)),
+                ('image', models.ImageField(upload_to=apps.home.models.image_upload_rename)),
+                ('categories', models.ManyToManyField(to='home.Categories', null=True, blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Taste',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('type', models.CharField(max_length=200)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='UnitType',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('display_name', models.CharField(max_length=200)),
+                ('weight', models.BooleanField(default=True)),
+                ('piece', models.BooleanField(default=False)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Vendors',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
+                ('city', models.ForeignKey(to='home.Cities')),
+                ('delivers_in', models.ManyToManyField(related_name=b'delivers', null=True, to='home.Cities', blank=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='item',
+            name='taste',
+            field=models.ForeignKey(to='home.Taste'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='item',
+            name='unit',
+            field=models.ForeignKey(to='home.UnitType'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='item',
+            name='vendor',
+            field=models.ForeignKey(to='home.Vendors'),
+            preserve_default=True,
         ),
     ]

@@ -27,6 +27,7 @@ INSTALLED_APPS = (
     'apps.home',
     'apps.product',
     'imagekit',
+    'django_pickling', # for fast serialization and deserialization of django models.
 )
 
 MIDDLEWARE_CLASSES = (
@@ -80,42 +81,14 @@ AUTH_USER_MODEL = 'home.AppUser'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-# Settings for imagekit
+# General
+APPEND_SLASH = True
+
+# Error pages
+handler404 = 'apps.home.views.not_found'
+handler500 = 'apps.home.views.internal_server_error'
+
+# Settings for imagekit - we want all images to be in one folder
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
 IMAGEKIT_CACHEFILE_DIR = 'cache'
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.hash'
-
-# Jinja template
-#DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-#             'datefmt' : "%d/%b/%Y %H:%M:%S"
-#         },
-#         'simple': {
-#             'format': '%(levelname)s %(message)s'
-#         },
-#     },
-#     'handlers': {
-#         'file': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'filename': 'mysite.log',
-#             'formatter': 'verbose'
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers':['file'],
-#             'propagate': True,
-#             'level':'DEBUG',
-#         },
-#         'apps.product': {
-#             'handlers': ['file'],
-#             'level': 'DEBUG',
-#         },
-#     }
-# }

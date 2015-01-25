@@ -37,6 +37,20 @@ def cart_manager(request):
                 product_item = Item.objects.get(id=product_id)
                 session_cart.remove(product_item)
                 return {'success': True, 'cart': session_cart.cart_dict}
+        elif query_type == 'update':
+            error_reason = 'products and quantity both are needed.'
+            if 'products[]' in post_data and 'quantity[]' in post_data:
+                products_list = post_data.getlist('products[]')
+                quantity_list = post_data.getlist('quantity[]')
+                error_reason = 'products and quantity both lists length should be same.'
+                if len(products_list) !=0 and len(products_list) == len(quantity_list):
+                    items_list = Item.objects.filter(pk__in=products_list).select_related('unit')
+                    error_reason = 'products_list contains invalid ids.'
+                    if len(items_list) == len(products_list):
+                        filtered_qty = [float(qty) for qty in quantity_list]
+                        for item, quantity in zip(items_list, filtered_qty):
+                            session_cart.set_quantity(item, quantity)
+                        return {'success': True, 'cart': session_cart.cart_dict}
     return {'success': False, 'reason': error_reason}, 400
 
 

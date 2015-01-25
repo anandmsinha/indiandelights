@@ -1,6 +1,5 @@
 <nav class="navbar navbar__top__in" role="navigation">
   <div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".bs-example-toolbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
@@ -10,7 +9,6 @@
       </button>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="{% url 'home_page' %}">Home</a></li>
@@ -18,7 +16,7 @@
         <li><a href="#">Contact</a></li>
         <li><a href="#">Track Order</a></li>
         <li><a href="{% url 'site_terms' %}">Terms</a></li>
-        <li><a href="#">Vendors</a></li>
+        <li><a href="{% url 'site_partner' %}">Become a partner</a></li>
       </ul>
     </div>
   </div>

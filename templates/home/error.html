@@ -1,0 +1,18 @@
+{% extends '_layouts/base.html' %}
+
+{%block sub_nav %} {% endblock %}
+
+{%block footer %} {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <h1> Oops ! </h1>
+            <h2> {{ code }} </h2>
+            <p>{{ message }}</p>
+            <p><a href="{% url 'home_page' %}">Go to home page</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

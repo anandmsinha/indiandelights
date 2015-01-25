@@ -5,8 +5,11 @@ from django.conf import settings
 from datetime import date
 from os.path import join
 from uuid import uuid4
+
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from imagekit.models import ProcessedImageField
+
 import json
 
 
@@ -82,6 +85,9 @@ class Vendors(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     delivers_in = models.ManyToManyField(
         Cities, blank=True, null=True, related_name='delivers')
+    image = ProcessedImageField(upload_to='config',
+        processors=[ResizeToFill(160, 100)], format='JPEG', options={'quality': 80}, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -101,18 +107,6 @@ class Taste(models.Model):
 
     def __unicode__(self):
         return self.type
-
-
-class TasteRelationship(models.Model):
-
-    """
-    Class that represents which taste is similar to which taste and a score of
-    similarity.
-    """
-
-    parent = models.ForeignKey(Taste)
-    child = models.ForeignKey(Taste, related_name='+')
-    score = models.FloatField(default=0.5)
 
 
 class UnitType(models.Model):
@@ -137,7 +131,6 @@ class Categories(models.Model):
 
     name = models.CharField(max_length=100)
     metadata = models.TextField(default='{}', blank=True)
-    categories = models.ManyToManyField("self", blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -200,9 +193,10 @@ class HomePage(models.Model):
     Model for representing item which will be shown on home page.
     """
 
-    category = models.ForeignKey(Categories, blank=True, null=True)
+    category = models.ForeignKey(Categories, blank=False, null=False)
     metadata = models.TextField(default='{}', blank=True)
     order = models.PositiveIntegerField(null=True, blank=True)
+    is_config = models.BooleanField(default=False)
 
     metacache = None
     is_decoded = False
@@ -228,7 +222,11 @@ class HomePage(models.Model):
                 return tmp_val
         return 6
 
+    def get_label(self):
+        if 'label' in self.metacache:
+            return self.metacache['label']
+        return self.category.name
+
     def fetch_items(self):
-        category_ids = [cat.pk for cat in self.category.categories.all()]
-        category_ids.append(self.category.pk)
-        self.main_items = Item.objects.filter(categories__pk__in = category_ids).select_related('unit')[:self.get_page_limit()]
+        self.main_items = Item.objects.filter(
+            categories__pk__exact=self.category.pk).select_related('unit')[:self.get_page_limit()]

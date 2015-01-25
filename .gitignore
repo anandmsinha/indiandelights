@@ -2,3 +2,7 @@ __pycache__/
 *.py[cod]
 /_gulp/bower_components
 /_gulp/node_modules
+/apps/home/testdata
+/media
+/htmlconv
+stuff.txt

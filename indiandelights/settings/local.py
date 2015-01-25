@@ -17,4 +17,8 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
 )
 
+INSTALLED_APPS += (
+    'debug_toolbar',
+)
+
 JQUERY_URL = '/static/js/jquery.min.js'

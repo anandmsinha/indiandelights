@@ -1,0 +1,48 @@
+{% extends '_layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container top__subnav__m">
+    <div class="row">
+        <div class="col-xs-12">
+            {% for vendor in vendors %}
+                <div class="media">
+                  <a class="media-left vendor__thumbnail" href="#">
+                    {% if vendor.image %}
+                        <img width="196" height="110" src="{{ vendor.image.url }}">
+                    {% else %}
+                        <img width="196" height="110" src="{% static 'img/no_photo_residential-160x100.jpg' %}">
+                    {% endif %}
+                  </a>
+                  <div class="media-body">
+                    <h5 class="media-heading font__mid"><a href="#">{{ vendor.name }}, {{ vendor.city.name }}</a></h5>
+                    <div class="media-content">
+                        <p>
+                            {% if vendor.description %}
+                              {{ vendor.description|linebreaks }}
+                            {% else %}
+                                No description available.
+                            {% endif %}
+                        </p>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+            <nav>
+                <ul class="pager">
+                    {% if vendors.has_previous %}
+                        <li class=""><a href="?page={{ vendors.previous_page_number }}"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                    {% endif %}
+                    {% if vendors.has_next %}
+                        <li class=""><a href="?page={{ vendors.next_page_number }}">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    {% else %}
+                        <li class="disabled"><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

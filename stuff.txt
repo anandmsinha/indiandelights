@@ -1,2 +1,7 @@
 1. heroku run __command__ # to run any command.
 2. heroku create --stack cedar # to create an application
+
+# Testing
+1. python manage.py test ### from root directory for normal tests.
+2. coverage run manage.py test -v 2 ### to run coverage test
+3. coverage html ### To generate test results

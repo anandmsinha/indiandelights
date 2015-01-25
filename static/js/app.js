@@ -1,8 +1,38 @@
 (function($, window, document) {
-  var addToCart, csrfSafeMethod, csrftoken, equalHeight, getCookie, objectSize, requestUrls, sameOriginUrl, updateCart;
+  var addToCart, cartHtml, csrfSafeMethod, csrftoken, equalHeight, getCookie, infoMessages, loopStatusBtn, objectSize, requestUrls, sameOriginUrl, showErrorToast, showSuccessToast, updateCart;
+  toastr.options = {
+    closeButton: true,
+    debug: false,
+    progressBar: false,
+    positionClass: 'toast-bottom-right',
+    showDuration: '300',
+    hideDuration: '1000',
+    timeOut: '5000',
+    extendedTimeOut: '1000',
+    showEasing: 'swing',
+    hideEasing: 'linear',
+    showMethod: 'fadeIn',
+    hideMethod: 'fadeOut'
+  };
+  showSuccessToast = function(message) {
+    return toastr["success"](message);
+  };
+  showErrorToast = function(message) {
+    return toastr["error"](message);
+  };
   requestUrls = {
     baseUrl: '/',
     addToCart: '/item/cart/'
+  };
+  infoMessages = {
+    itemAdded: 'Item successfully added to cart',
+    itemRemoved: 'Item successfully removed from cart',
+    error: 'Some error has occured',
+    errorRefresh: 'Some error has occured please refresh the page and try again.'
+  };
+  cartHtml = {
+    emptyCart: '<p class="text-info">Your cart is empty</p>',
+    mediaObject: '<div class="media"><a href="#" class="pull-left"><img width="40" height="36" src="{0}" alt=""></a>' + '<div class="media-body"><a href="#">{1}</a><p>Qty - {2} X {3}</p></div></div>'
   };
   if (!String.prototype.format) {
     String.prototype.format = function() {
@@ -101,17 +131,18 @@
   updateCart = function(cart) {
     var bformat, cartSize, htmlop;
     htmlop = '';
-    bformat = '<div class="media"><a href="#" class="pull-left"><img width="40" height="36" src="{0}" alt=""></a>' + '<div class="media-body"><a href="#">{1}</a><p>Qty - {2} X {3}</p></div></div>';
+    bformat = cartHtml.mediaObject;
     cartSize = objectSize(cart);
     $.each(cart, function(k, v) {
       return htmlop += bformat.format(v.thumbnail, v.name, v.qty, v.qty_display);
     });
     if (cartSize > 0) {
       $('#main__cart__btn__codes').removeClass('hide');
+      $('#cart__dropdown').html(htmlop);
     } else {
       $('#main__cart__btn__codes').addClass('hide');
+      $('#cart__dropdown').html(cartHtml.emptyCart);
     }
-    $('#cart__dropdown').html(htmlop);
     return $('#cart__default__count').text(cartSize);
   };
   addToCart = function(id, qty, msg) {
@@ -125,11 +156,14 @@
       },
       success: function(data) {
         if (data.cart) {
-          return updateCart(data.cart);
+          updateCart(data.cart);
+          return showSuccessToast(msg);
+        } else {
+          return showErrorToast(infoMessages.error);
         }
       },
       error: function(data) {
-        return alert('Some error has occured');
+        return showErrorToast(infoMessages.error);
       }
     });
   };
@@ -140,21 +174,75 @@
       qty = link.parent().find('.special__select__box').val();
       link.addClass('disabled');
       link.attr('disabled', 'disabled');
-      addToCart(link.attr('pid'), qty, 'Your item has been succesfully added to cart.');
+      addToCart(link.attr('pid'), qty, infoMessages.itemAdded);
       link.removeClass('disabled');
       link.removeAttr('disabled');
     }
     return false;
   });
+  loopStatusBtn = function(btn) {
+    var tmpDisbAttr;
+    tmpDisbAttr = btn.attr('disabled');
+    return !((typeof tmpDisbAttr !== typeof void 0) && (tmpDisbAttr !== false));
+  };
   $(document).on('click', '#product__pchase__btn', function(e) {
-    var btnDisbAttr, loopStatus, mainBtn;
+    var mainBtn;
     mainBtn = $(this);
-    btnDisbAttr = mainBtn.attr('disabled');
-    loopStatus = !((typeof btnDisbAttr !== typeof void 0) && (btnDisbAttr !== false));
-    if (loopStatus) {
+    if (loopStatusBtn(mainBtn)) {
       mainBtn.attr('disabled', 'disabled');
-      addToCart(mainBtn.attr('pid'), $('#product__pchase__select').val(), 'Your item has been added to cart');
+      addToCart(mainBtn.attr('pid'), $('#product__pchase__select').val(), infoMessages.itemAdded);
       return mainBtn.removeAttr('disabled');
+    }
+  });
+  $(document).on('click', '#cart__ck__upd__cart', function(e) {
+    var cart__inputs, items_array, quantity_array;
+    cart__inputs = $('#cart__ck__table__body').find('.cart__ck__input__qty');
+    items_array = [];
+    quantity_array = [];
+    cart__inputs.each(function(index) {
+      var newval, oldval;
+      oldval = parseInt($(this).attr('oval'));
+      newval = parseInt($(this).val());
+      if (oldval !== newval) {
+        items_array.push($(this).attr('pid'));
+        return quantity_array.push(newval);
+      }
+    });
+    if (items_array.length === 0) {
+      return showSuccessToast('No change detected in cart.');
+    } else {
+      return $.ajax({
+        type: 'POST',
+        url: requestUrls.addToCart,
+        data: {
+          type: 'update',
+          'products[]': items_array,
+          'quantity[]': quantity_array
+        },
+        success: function(data) {
+          var cartData, cartPriceTotal, cartSize, mainHtml;
+          if (data.cart) {
+            cartData = data.cart;
+            updateCart(cartData);
+            cartSize = objectSize(cartData);
+            if (cartSize > 0) {
+              mainHtml = '';
+              cartPriceTotal = 0;
+              $.each(cartData, function(key, val) {
+                cartPriceTotal += parseFloat(val.subtotal);
+                return mainHtml += "<tr class=\"cart__item__row\"><td><img src=\"" + val.thumbnail + "\"></td><td>" + val.name + "</td><td>" + val.price + "<td><input type=\"number\" step=\"1\" class=\"cart__ck__input__qty\" pid=\"" + val.pk + "\" min=\"1\" oval=\"" + val.qty + "\" value=\"" + val.qty + "\" /></td><td><button pid=\"" + val.pk + "\" mtotal=\"" + val.subtotal + "\" type=\"button\" class=\"btn btn-danger cart__ck__remove btn-xs\">Remove</button></td><td><b>" + val.subtotal + " Rs</b></td>";
+              });
+              mainHtml += "<tr><td colspan=\"4\"><button id=\"cart__ck__upd__cart\" type=\"button\" class=\"btn btn-info pull-right\">Update Cart</button></td><td><p class=\"pull-right\">Total</p></td><td><b><span id=\"cart__ck__total__cost\">" + cartPriceTotal + "</span> Rs</b></td></tr>";
+              $('#cart__ck__table__body').html(mainHtml);
+            } else {
+              $('#cart__ck__main__table').html(cartHtml.emptyCart);
+            }
+            return showSuccessToast('Cart updated');
+          } else {
+            return showErrorToast('Cart update failed');
+          }
+        }
+      });
     }
   });
   return $(document).on('click', '.cart__ck__remove', function(e) {
@@ -178,14 +266,17 @@
             if (cartSize > 0) {
               total = parseFloat($('#cart__ck__total__cost').text()) - parseFloat(removeBtn.attr('mtotal'));
               $('#cart__ck__total__cost').text(total);
-              return removeBtn.parent().parent().remove();
+              removeBtn.parent().parent().remove();
             } else {
-              return $('#cart__ck__main__table').html("<p class=\"text-danger\">Your cart is empty.</p>");
+              $('#cart__ck__main__table').html(cartHtml.emptyCart);
             }
+            return showSuccessToast(infoMessages.itemRemoved);
+          } else {
+            return showErrorToast(infoMessages.errorRefresh);
           }
         },
         error: function(data) {
-          return alert('Some error has occured refresh the page and try again.');
+          return showErrorToast(infoMessages.errorRefresh);
         }
       });
       return removeBtn.removeClass('disabled');

@@ -20,25 +20,35 @@
             </ul>
         </div>
         <div class="col-sm-9">
+        {% if slider_images|length > 0 %}
           <div id="carousel-example-captions" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
-              <li data-target="#carousel-example-captions" data-slide-to="0" class=""></li>
-              <li data-target="#carousel-example-captions" data-slide-to="1" class="active"></li>
-              <li data-target="#carousel-example-captions" data-slide-to="2" class=""></li>
+              {% for i in loop_range %}
+                {% if i == 0 %}
+                  <li data-target="#carousel-example-captions" data-slide-to="0" class="active"></li>
+                {% else %}
+                  <li data-target="#carousel-example-captions" data-slide-to="{{ i }}"></li>
+                {% endif %}
+              {% endfor %}
             </ol>
             <div class="carousel-inner">
-              <div class="item"><img alt="900x500" src="{% static 'img/chef-cutting-1140x340.jpg' %}"></div>
-              <div class="item active"><img alt="900x500" src="{% static 'img/src_5224b831ee2c92.61171640.jpg' %}"></div>
-              <div class="item"><img src="{% static 'img/src_pbbq70g64l25069.13915850.jpg' %}"></div>
+            {% for image in slider_images %}
+              {% if forloop.counter == 1 %}
+                <div class="item active"><img alt="900x500" src="{{ image.image.url }}"></div>
+              {% else %}
+                <div class="item"><img alt="900x500" src="{{ image.image.url }}"></div>
+              {% endif %}
+            {% endfor %}
             </div>
             <a class="left carousel-control" href="#carousel-example-captions" role="button" data-slide="prev"><span class="icon-prev"></span></a>
             <a class="right carousel-control" href="#carousel-example-captions" role="button" data-slide="next"><span class="icon-next"></span></a>
           </div>
+          {% endif %}
           <!-- Main components of home page -->
           <div id="main_page_home_components">
             {% for home_component in home_components %}
               {% if home_component.main_items|length > 0 %}
-                <h3 class="category__heading">{{ home_component.category.name }}</h3>
+                <h3 class="category__heading">{{ home_component.get_label }}</h3>
                 <div class="row">
                   {% for item in home_component.main_items %}
                     <div class="col-xs-12 col__xs__6  col-sm-6 col-md-4">

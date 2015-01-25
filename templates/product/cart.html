@@ -21,11 +21,11 @@
                     </thead>
                     <tbody id="cart__ck__table__body">
                         {% for k, v in main_cart.cart_dict.items %}
-                            <tr>
+                            <tr class="cart__item__row">
                                 <td><img src="{{ v.thumbnail }}"></td>
                                 <td>{{ v.name }}</td>
                                 <td>{{ v.price }}</td>
-                                <td><input type="number" class="cart__ck__input__qty" min="1" oval="{{ v.qty }}" value="{{ v.qty }}" /></td>
+                                <td><input type="number" class="cart__ck__input__qty" pid="{{ v.pk }}" min="1" step="1" oval="{{ v.qty }}" value="{{ v.qty }}" /></td>
                                 <td><button pid="{{ v.pk }}" mtotal="{{ v.subtotal }}" type="button" class="btn btn-danger cart__ck__remove btn-xs">Remove</button></td>
                                 <td><b>{{ v.subtotal }} Rs</b></td>
                             </tr>
