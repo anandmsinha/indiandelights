@@ -6,3 +6,6 @@ __pycache__/
 /media
 /htmlconv
 stuff.txt
+debug.log
+/logs
+/logs/*

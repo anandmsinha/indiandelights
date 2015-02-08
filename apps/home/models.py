@@ -5,6 +5,7 @@ from django.conf import settings
 from datetime import date
 from os.path import join
 from uuid import uuid4
+from mptt.models import MPTTModel, TreeForeignKey
 
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -62,10 +63,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class Cities(models.Model):
+class City(models.Model):
 
     """
-    Class for cities
+    Class for city
     """
 
     name = models.CharField(max_length=150)
@@ -74,17 +75,17 @@ class Cities(models.Model):
         return self.name
 
 
-class Vendors(models.Model):
+class Vendor(models.Model):
 
     """
     Class for handling vendors.
     """
 
     name = models.CharField(max_length=100)
-    city = models.ForeignKey(Cities)
+    city = models.ForeignKey(City)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     delivers_in = models.ManyToManyField(
-        Cities, blank=True, null=True, related_name='delivers')
+        City, blank=True, null=True, related_name='delivers')
     image = ProcessedImageField(upload_to='config',
         processors=[ResizeToFill(160, 100)], format='JPEG', options={'quality': 80}, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -97,16 +98,17 @@ class Vendors(models.Model):
         return ', '.join(delivery_cities)
 
 
-class Taste(models.Model):
+class Taste(MPTTModel):
 
     """
     class for representing taste of items.
     """
 
-    type = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
 
     def __unicode__(self):
-        return self.type
+        return self.name
 
 
 class UnitType(models.Model):
@@ -123,14 +125,14 @@ class UnitType(models.Model):
         return self.display_name
 
 
-class Categories(models.Model):
+class Category(MPTTModel):
 
     """
     Class for category of product like diwali sale, sweet, salty
     """
 
     name = models.CharField(max_length=100)
-    metadata = models.TextField(default='{}', blank=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
 
     def __unicode__(self):
         return self.name
@@ -157,14 +159,13 @@ class Item(models.Model):
     """
 
     name = models.CharField(max_length=200)
-    vendor = models.ForeignKey(Vendors)
+    vendor = models.ForeignKey(Vendor)
     available = models.BooleanField(default=True)
     taste = models.ForeignKey(Taste)
     unit = models.ForeignKey(UnitType)
     made_with = models.TextField(null=True, blank=True)
     price = models.FloatField(default=100.0)
-    categories = models.ManyToManyField(
-        Categories, blank=True, null=True)
+    category = models.ForeignKey(Category)
     image = models.ImageField(upload_to=image_upload_rename)
     image_thumbnail = ImageSpecField(source='image', processors=[
                                      ResizeToFill(260, 208)], format='JPEG',
@@ -193,7 +194,7 @@ class HomePage(models.Model):
     Model for representing item which will be shown on home page.
     """
 
-    category = models.ForeignKey(Categories, blank=False, null=False)
+    category = models.ForeignKey(Category, blank=False, null=False)
     metadata = models.TextField(default='{}', blank=True)
     order = models.PositiveIntegerField(null=True, blank=True)
     is_config = models.BooleanField(default=False)
@@ -229,4 +230,6 @@ class HomePage(models.Model):
 
     def fetch_items(self):
         self.main_items = Item.objects.filter(
-            categories__pk__exact=self.category.pk).select_related('unit')[:self.get_page_limit()]
+            category__pk__in=self.category.get_descendants(
+                include_self=True).values_list('pk')
+        ).select_related('unit')[:self.get_page_limit()]

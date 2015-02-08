@@ -1,0 +1,37 @@
+{% extends '_layouts/base.html' %}
+{% load bootstrap %}
+
+{% block sub_nav %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <div class="partner__form__block">
+                <div class="form__description__block">
+                    <h4 class="font__mid">Sell with us</h4>
+                    <p class="partner__sell__desc">By creating an account, you agree to be nice and post high quality content. The Designer News community bans users very liberally, so behave yourself. </p>
+                </div>
+                <form action="{% url 'partners:register' %}" class="form-horizontal partner__register__form" method="POST">
+                    {% csrf_token %}
+                    {{ form|bootstrap_horizontal }}
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" class="btn btn__register" value="Submit" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('body').addClass('partner__register__form__pg')
+    })
+</script>
+{% endblock %}

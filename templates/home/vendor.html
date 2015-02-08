@@ -6,27 +6,29 @@
     <div class="row">
         <div class="col-xs-12">
             {% for vendor in vendors %}
-                <div class="media">
-                  <a class="media-left vendor__thumbnail" href="#">
-                    {% if vendor.image %}
-                        <img width="196" height="110" src="{{ vendor.image.url }}">
-                    {% else %}
-                        <img width="196" height="110" src="{% static 'img/no_photo_residential-160x100.jpg' %}">
-                    {% endif %}
-                  </a>
-                  <div class="media-body">
-                    <h5 class="media-heading font__mid"><a href="#">{{ vendor.name }}, {{ vendor.city.name }}</a></h5>
-                    <div class="media-content">
-                        <p>
-                            {% if vendor.description %}
-                              {{ vendor.description|linebreaks }}
-                            {% else %}
-                                No description available.
-                            {% endif %}
-                        </p>
+                <h4 class="font__mid"><a href="#">{{ vendor.name }} - {{ vendor.city.name }}</a></h4>
+                    <div class="vendor__description">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-2">
+                                <div class="vendor__image">
+                                    {% if vendor.image %}
+                                        <img width="196" height="110" src="{{ vendor.image.url }}">
+                                    {% else %}
+                                        <img width="196" height="110" src="{% static 'img/no_photo_residential-160x100.jpg' %}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-10">
+                                <div class="vendor__text">
+                                    {% if vendor.description %}
+                                      {{ vendor.description|linebreaks }}
+                                    {% else %}
+                                        No description available.
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
             {% endfor %}
             <nav>
                 <ul class="pager">

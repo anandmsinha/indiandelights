@@ -26,8 +26,11 @@ INSTALLED_APPS = (
 
     'apps.home',
     'apps.product',
+    'apps.partners',
     'imagekit',
     'django_pickling', # for fast serialization and deserialization of django models.
+    'bootstrapform',
+    'mptt'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -92,3 +95,53 @@ handler500 = 'apps.home.views.internal_server_error'
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
 IMAGEKIT_CACHEFILE_DIR = 'cache'
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.hash'
+
+LOG_FOLDER = os.path.join(PROJECT_DIR, 'logs')
+# Logging settings
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s.%(msecs)d %(name)s-%(levelname)s (%(filename)s:%(lineno)s %(funcName)s)]: %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_FOLDER, 'apps.log'),
+            'filters': ['require_debug_true'],
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'apps.product': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'apps.home': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'apps.partners': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        }
+    }
+}

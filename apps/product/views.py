@@ -3,6 +3,9 @@ from apps.home.models import Item
 from jsonview.decorators import json_view
 from django.views.decorators.http import require_POST
 from .cart import Cart
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def item_by_pk(request, pk):
@@ -58,3 +61,7 @@ def cart_view(request):
     template_name = 'product/cart.html'
 
     return render(request, template_name)
+
+
+def category_view(request):
+    logger.debug("category_view called")

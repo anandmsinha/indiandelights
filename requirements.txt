@@ -8,3 +8,6 @@ whitenoise
 django-debug-toolbar
 django-pickling
 coverage==3.7.1
+jsonfield
+django-bootstrap-form==3.1.0
+django-mptt

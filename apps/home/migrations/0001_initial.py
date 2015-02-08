@@ -2,9 +2,11 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import django.utils.timezone
-from django.conf import settings
+import mptt.fields
 import apps.home.models
+import django.utils.timezone
+import imagekit.models.fields
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -35,18 +37,23 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Categories',
+            name='Category',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=100)),
-                ('metadata', models.TextField(default=b'{}', blank=True)),
+                ('lft', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('rght', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('tree_id', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('level', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('parent', mptt.fields.TreeForeignKey(related_name=b'children', blank=True, to='home.Category', null=True)),
             ],
             options={
+                'abstract': False,
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Cities',
+            name='City',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=150)),
@@ -61,7 +68,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('metadata', models.TextField(default=b'{}', blank=True)),
                 ('order', models.PositiveIntegerField(null=True, blank=True)),
-                ('category', models.ForeignKey(to='home.Categories')),
+                ('is_config', models.BooleanField(default=False)),
+                ('category', models.ForeignKey(to='home.Category')),
             ],
             options={
             },
@@ -76,7 +84,7 @@ class Migration(migrations.Migration):
                 ('made_with', models.TextField(null=True, blank=True)),
                 ('price', models.FloatField(default=100.0)),
                 ('image', models.ImageField(upload_to=apps.home.models.image_upload_rename)),
-                ('categories', models.ManyToManyField(to='home.Categories', null=True, blank=True)),
+                ('category', models.ForeignKey(to='home.Category')),
             ],
             options={
             },
@@ -86,9 +94,15 @@ class Migration(migrations.Migration):
             name='Taste',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('type', models.CharField(max_length=200)),
+                ('name', models.CharField(max_length=200)),
+                ('lft', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('rght', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('tree_id', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('level', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('parent', mptt.fields.TreeForeignKey(related_name=b'children', blank=True, to='home.Taste', null=True)),
             ],
             options={
+                'abstract': False,
             },
             bases=(models.Model,),
         ),
@@ -105,12 +119,14 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Vendors',
+            name='Vendor',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=100)),
-                ('city', models.ForeignKey(to='home.Cities')),
-                ('delivers_in', models.ManyToManyField(related_name=b'delivers', null=True, to='home.Cities', blank=True)),
+                ('image', imagekit.models.fields.ProcessedImageField(null=True, upload_to=b'config', blank=True)),
+                ('description', models.TextField(null=True, blank=True)),
+                ('city', models.ForeignKey(to='home.City')),
+                ('delivers_in', models.ManyToManyField(related_name=b'delivers', null=True, to='home.City', blank=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -132,7 +148,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='vendor',
-            field=models.ForeignKey(to='home.Vendors'),
+            field=models.ForeignKey(to='home.Vendor'),
             preserve_default=True,
         ),
     ]

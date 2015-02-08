@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
-from .models import Cities, Vendors, Taste, UnitType, Categories, Item, HomePage
+from .models import City, Vendor, Taste, UnitType, Category, Item, HomePage
 
 
 class UnitTypeForm(ModelForm):
@@ -23,10 +23,10 @@ class UnitTypeAdmin(admin.ModelAdmin):
     form = UnitTypeForm
 
 
-admin.site.register(Cities)
-admin.site.register(Vendors)
+admin.site.register(City)
+admin.site.register(Vendor)
 admin.site.register(Taste)
 admin.site.register(UnitType, UnitTypeAdmin)
 admin.site.register(Item)
-admin.site.register(Categories)
+admin.site.register(Category)
 admin.site.register(HomePage)

@@ -3,6 +3,6 @@ from .views import item_by_pk, cart_manager
 
 
 urlpatterns = patterns('',
-    url(r'^(?P<pk>[0-9]+)/$', item_by_pk, name='item_pk'),
-    url(r'^cart/$', cart_manager, name='item_cart'),
+    url(r'^item/(?P<pk>[0-9]+)/$', item_by_pk, name='item_pk'),
+    url(r'^item/cart/$', cart_manager, name='item_cart'),
 )

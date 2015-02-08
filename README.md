@@ -28,4 +28,10 @@ Things to do
 26. ~~Fix change detection in update cart.~~
 27. ~~Create a partners page~~
 28. Make register page for partners page.
-29. Improve design of all vendors page.
+    1. https://news.layervault.com/users/new
+29. ~~Improve design of all vendors page.~~
+30. Page for category
+31. Text on partner page-
+    1. http://www.colmtuite.com/
+32. Pick a better font
+33. mptt categories

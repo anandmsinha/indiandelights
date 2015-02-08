@@ -7,16 +7,12 @@
     <div class="row">
         <div class="col-sm-3">
             <ul class="nav nav__side__menu">
-              <li class="heading__item">Categories</li>
-              <li><a href="#">Salty</a></li>
-              <li><a href="#">Sweets</a></li>
-              <li><a href="#">Spicy</a></li>
-              <li><a href="#">Sendha</a></li>
-              <li class="heading__item">Specials</li>
-              <li><a href="#">Salty</a></li>
-              <li><a href="#">Sweets</a></li>
-              <li><a href="#">Spicy</a></li>
-              <li><a href="#">Sendha</a></li>
+              {% for key, value in left_menu_items.items %}
+                <li class="heading__item">{{ key }}</li>
+                {% for item in value %}
+                  <li><a href="#">{{ item.label }}</a></li>
+                {% endfor %}
+              {% endfor %}
             </ul>
         </div>
         <div class="col-sm-9">

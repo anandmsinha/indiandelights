@@ -1,4 +1,5 @@
 {% extends '_layouts/base.html' %}
+{% load static %}
 
 {% block sub_nav %}
 {% endblock %}
@@ -7,12 +8,22 @@
 <div class="container">
     <div class="row main__static__block">
         <div class="col-xs-12 col-md-8 col-md-offset-2">
-            <h1 class="font__mid text-center">Do you own a growing business and looking to expand ?</h1>
-            <p class="text-center partner__desc">We're a Startup Studio. A company that builds companies. Sharing people, resources and technologies to accelerate our successes. We develop digital products for ourselves and select partners.</p>
+            <!-- <h1 class="font__mid text-center">Do you own a growing business and looking to expand ?</h1>
+            <p class="text-center partner__desc">We're a Startup Studio. A company that builds companies. Sharing people, resources and technologies to accelerate our successes. We develop digital products for ourselves and select partners.</p> -->
+            <p class="partner__intro">We're a Startup Studio. A company that builds companies. Sharing people, resources and technologies to accelerate our successes. We develop digital products for ourselves and select partners.</p>
         </div>
         <div class="clearfix"></div>
-        <div class="col-xs-2 col-xs-offset-5">
-            <button type="button" class="btn btn-primary btn-lg btn-block">Register Now</button>
+        <div class="col-xs-6 col-sm-4 col-md-2 col-xs-offset-3 col-sm-offset-4 col-md-offset-5 reg__btn__block">
+            <a href="{% url 'partners:register' %}" type="button" class="btn btn__register btn-block">Register Now</a>
+        </div>
+        <div class="clearfix"></div>
+        <hr />
+        <div class="col-xs-12">
+            <h3 class="text-center faq__title">Why should you sell with us</h3>
+        </div>
+        <div class="col-xs-6 col-md-4">
+            <h4 class="font__mid partner__sell__head">Ease of Selling</h4>
+            <p class="partner__sell__desc">Intuitive interface to manage your store, cataloguing support, end to end supply chain management. You can focus on your brand and let us take care of the rest.</p>
         </div>
         <div class="clearfix"></div>
         <hr />
@@ -22,19 +33,14 @@
             <p class="faq__ans">Product Hunt surfaces the best new products, every day. It's a place for product-loving enthusiasts to share and geek out about the latest mobile apps, websites, hardware projects, and tech creations.</p>
             <p class="faq__ques">How can i join Flavood ?</p>
             <p class="faq__ans">Click on the register button above. Once done we will contact you.</p>
+            <p class="faq__ques">What type of businesse's can join Flavood ?</p>
+            <p class="faq__ans">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         </div>
     </div>
 </div>
-<!-- <div class="partner__section">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 partner__section--content">
-                <h3 class="text-center">Why us?</h3>
-                <ul class="list-unstyled">
-                    <li>User Experience</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div> -->
 {% endblock %}
